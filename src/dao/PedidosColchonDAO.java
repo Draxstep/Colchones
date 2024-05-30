@@ -9,13 +9,13 @@ public class MattressOrdersDAO {
     private Connection connection;
 
     public MattressOrdersDAO() throws SQLException {
-        connection = DatabaseConnection.connect();
+        connection = ConexionBD.conectarse();
     }
 
     public void addMattressOrder(MattressOrders mattressOrder) {
         try (PreparedStatement pstmt = connection.prepareStatement(
-                "INSERT INTO mattress_orders (mattress_order_id, mattress_order_date, supplier_id, employee_id) " +
-                "VALUES (mattress_orders_seq.NEXTVAL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                "INSERT INTO pedidos_colchon (id_pedido_colchon, fecha_pedido_colchon, id_proveedor, id_empleado) " +
+                "VALUES (seq_pedidos_colchon.NEXTVAL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setDate(1, mattressOrder.getMattress_order_date());
             pstmt.setInt(2, mattressOrder.getSupplier_id());
             pstmt.setInt(3, mattressOrder.getEmployee_id());
@@ -30,12 +30,12 @@ public class MattressOrdersDAO {
     public ArrayList<MattressOrders> getMattressOrders() throws SQLException {
         ArrayList<MattressOrders> orderList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM mattress_orders");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM pedidos_colchon");
             while (rs.next()) {
-                int id_order = rs.getInt("mattress_order_id");
-                Date orderDate = rs.getDate("mattress_order_date");
-                int supplierId = rs.getInt("supplier_id");
-                int employeeId = rs.getInt("employee_id");
+                int id_order = rs.getInt("id_pedido_colchon");
+                Date orderDate = rs.getDate("fecha_pedido_colchon");
+                int supplierId = rs.getInt("id_proveedor");
+                int employeeId = rs.getInt("id_empleado");
                 MattressOrders order = new MattressOrders(id_order, orderDate, supplierId, employeeId);
                 orderList.add(order);
             }
@@ -47,8 +47,8 @@ public class MattressOrdersDAO {
 
     public boolean updateMattressOrder(MattressOrders updatedOrder) {
         try (PreparedStatement pstmt = connection.prepareStatement(
-                "UPDATE mattress_orders SET mattress_order_date = ?, supplier_id = ?, employee_id = ? " +
-                "WHERE mattress_order_id = ?")) {
+                "UPDATE pedidos_colchon SET fecha_pedido_colchon = ?, id_proveedor = ?, id_empleado = ? " +
+                "WHERE id_pedido_colchon = ?")) {
             pstmt.setDate(1, updatedOrder.getMattress_order_date());
             pstmt.setInt(2, updatedOrder.getSupplier_id());
             pstmt.setInt(3, updatedOrder.getEmployee_id());
@@ -65,7 +65,7 @@ public class MattressOrdersDAO {
 
     public boolean deleteMattressOrder(int id_order) {
         try (PreparedStatement pstmt = connection.prepareStatement(
-                "DELETE FROM mattress_orders WHERE mattress_order_id = ?")) {
+                "DELETE FROM pedidos_colchon WHERE id_pedido_colchon = ?")) {
             pstmt.setInt(1, id_order);
             pstmt.executeUpdate();
 
@@ -77,3 +77,4 @@ public class MattressOrdersDAO {
         }
     }
 }
+
