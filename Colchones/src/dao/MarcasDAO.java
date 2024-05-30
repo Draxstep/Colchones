@@ -15,15 +15,10 @@ public class MarcasDAO {
     }
 
     public void agregarMarca(Marcas marca) {
-        try (PreparedStatement pstmt = conexion.prepareStatement("INSERT INTO marcas (nombre_marca) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, marca.getNombre_marca());
+        try (PreparedStatement pstmt = conexion.prepareStatement("INSERT INTO marcas (id_marca, nombre_marca) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, marca.getId_marca());
+            pstmt.setString(2, marca.getNombre_marca());
             pstmt.executeUpdate();
-
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    marca.setId_marca(generatedKeys.getInt(1));
-                }
-            }
 
             System.out.println("Marca agregada: " + marca.getNombre_marca());
         } catch (SQLException e) {

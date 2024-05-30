@@ -15,21 +15,16 @@ public class LugaresDAO {
     }
 
     public void agregarLugar(Lugares lugar) {
-        try (PreparedStatement pstmt = conexion.prepareStatement("INSERT INTO lugares (nombre_lugar, tipo_lugar, id_lugar_ubicacion) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, lugar.getNombre_lugar());
-            pstmt.setString(2, String.valueOf(lugar.getTipo_lugar()));
+        try (PreparedStatement pstmt = conexion.prepareStatement("INSERT INTO lugares (id_lugar, nombre_lugar, tipo_lugar, id_lugar_ubicacion) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, lugar.getId_lugar());
+            pstmt.setString(2, lugar.getNombre_lugar());
+            pstmt.setString(3, String.valueOf(lugar.getTipo_lugar()));
             if (lugar.getId_lugar_ubicacion() != null) {
-                pstmt.setInt(3, lugar.getId_lugar_ubicacion());
+                pstmt.setInt(4, lugar.getId_lugar_ubicacion());
             } else {
-                pstmt.setNull(3, java.sql.Types.INTEGER);
+                pstmt.setNull(4, java.sql.Types.INTEGER);
             }
             pstmt.executeUpdate();
-
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    lugar.setId_lugar(generatedKeys.getInt(1));
-                }
-            }
 
             System.out.println("Lugar agregado: " + lugar.getNombre_lugar());
         } catch (SQLException e) {

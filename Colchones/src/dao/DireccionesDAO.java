@@ -15,18 +15,13 @@ public class DireccionesDAO {
     }
 
     public void agregarDireccion(Direcciones direccion) {
-        try (PreparedStatement pstmt = conexion.prepareStatement("INSERT INTO direcciones (tipo_calle, numero_edificio, descripcion_direccion, id_lugar) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, String.valueOf(direccion.getTipo_calle()));
-            pstmt.setInt(2, direccion.getNumero_edificio());
-            pstmt.setString(3, direccion.getDescripcion_direccion());
-            pstmt.setInt(4, direccion.getId_lugar());
+        try (PreparedStatement pstmt = conexion.prepareStatement("INSERT INTO direcciones (id_direccion, tipo_calle, numero_edificio, descripcion_direccion, id_lugar) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, direccion.getId_direccion());
+            pstmt.setString(2, String.valueOf(direccion.getTipo_calle()));
+            pstmt.setInt(3, direccion.getNumero_edificio());
+            pstmt.setString(4, direccion.getDescripcion_direccion());
+            pstmt.setInt(5, direccion.getId_lugar());
             pstmt.executeUpdate();
-
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    direccion.setId_direccion(generatedKeys.getInt(1));
-                }
-            }
 
             System.out.println("Dirección agregada: " + direccion.getDescripcion_direccion());
         } catch (SQLException e) {

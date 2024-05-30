@@ -41,6 +41,20 @@ public class DireccionesPersonaDAO {
         return lista_direcciones_persona;
     }
 
+    // actualiza solo el id_persona No el id_direccion
+    public boolean actualizarDireccionPersona(DireccionesPersona direccionPersonaActualizada) {
+        try (PreparedStatement pstmt = conexion.prepareStatement("UPDATE direcciones_persona SET id_persona = ? WHERE id_direccion = ?")) {
+            pstmt.setInt(1, direccionPersonaActualizada.getId_persona());
+            pstmt.setInt(2, direccionPersonaActualizada.getId_direccion());
+            pstmt.executeUpdate();
+
+            System.out.println("Dirección-Persona modificada");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean eliminarDireccionPersona(int id_direccion, int id_persona) {
         try (PreparedStatement pstmt = conexion.prepareStatement("DELETE FROM direcciones_persona WHERE id_direccion = ? AND id_persona = ?")) {
             pstmt.setInt(1, id_direccion);
