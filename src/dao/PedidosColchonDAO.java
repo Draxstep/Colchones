@@ -2,57 +2,57 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
-import model.PedidosColchon;
+import model.MattressOrders;
 
-public class PedidosColchonDAO {
+public class MattressOrdersDAO {
 
-    private Connection conexion;
+    private Connection connection;
 
-    public PedidosColchonDAO() throws SQLException {
-        conexion = ConexionBD.conectarse();
+    public MattressOrdersDAO() throws SQLException {
+        connection = ConexionBD.conectarse();
     }
 
-    public void agregarPedidoColchon(PedidosColchon pedidoColchon) {
-        try (PreparedStatement pstmt = conexion.prepareStatement(
+    public void addMattressOrder(MattressOrders mattressOrder) {
+        try (PreparedStatement pstmt = connection.prepareStatement(
                 "INSERT INTO pedidos_colchon (id_pedido_colchon, fecha_colchon_pedido, id_empresa_proveedor, id_empleado) " +
                 "VALUES (pedidos_colchon_seq.NEXTVAL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setDate(1, pedidoColchon.getFecha_colchon_pedido());
-            pstmt.setInt(2, pedidoColchon.getId_empresa_proveedor());
-            pstmt.setInt(3, pedidoColchon.getId_empleado());
+            pstmt.setDate(1, mattressOrder.getFecha_colchon_pedido());
+            pstmt.setInt(2, mattressOrder.getId_empresa_proveedor());
+            pstmt.setInt(3, mattressOrder.getId_empleado());
             pstmt.executeUpdate();
 
-            System.out.println("Pedido de colchon agregado: " + pedidoColchon.getFecha_colchon_pedido());
+            System.out.println("Pedido de colchon agregado: " + mattressOrder.getFecha_colchon_pedido());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<PedidosColchon> obtenerPedidosColchon() throws SQLException {
-        ArrayList<PedidosColchon> lista_pedidos = new ArrayList<>();
-        try (Statement stmt = conexion.createStatement()) {
+    public ArrayList<MattressOrders> getMattressOrders() throws SQLException {
+        ArrayList<MattressOrders> orderList = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery("SELECT * FROM pedidos_colchon");
             while (rs.next()) {
-                int id_pedido_colchon = rs.getInt("id_pedido_colchon");
-                Date fecha_colchon_pedido = rs.getDate("fecha_colchon_pedido");
-                int id_empresa_proveedor = rs.getInt("id_empresa_proveedor");
-                int id_empleado = rs.getInt("id_empleado");
-                PedidosColchon pedido = new PedidosColchon(id_pedido_colchon, fecha_colchon_pedido, id_empresa_proveedor, id_empleado);
-                lista_pedidos.add(pedido);
+                int id_order = rs.getInt("id_pedido_colchon");
+                Date orderDate = rs.getDate("fecha_colchon_pedido");
+                int supplierId = rs.getInt("id_empresa_proveedor");
+                int employeeId = rs.getInt("id_empleado");
+                MattressOrders order = new MattressOrders(id_order, orderDate, supplierId, employeeId);
+                orderList.add(order);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return lista_pedidos;
+        return orderList;
     }
 
-    public boolean actualizarPedidoColchon(PedidosColchon pedidoActualizado) {
-        try (PreparedStatement pstmt = conexion.prepareStatement(
+    public boolean updateMattressOrder(MattressOrders updatedOrder) {
+        try (PreparedStatement pstmt = connection.prepareStatement(
                 "UPDATE pedidos_colchon SET fecha_colchon_pedido = ?, id_empresa_proveedor = ?, id_empleado = ? " +
                 "WHERE id_pedido_colchon = ?")) {
-            pstmt.setDate(1, pedidoActualizado.getFecha_colchon_pedido());
-            pstmt.setInt(2, pedidoActualizado.getId_empresa_proveedor());
-            pstmt.setInt(3, pedidoActualizado.getId_empleado());
-            pstmt.setInt(4, pedidoActualizado.getId_pedido_colchon());
+            pstmt.setDate(1, updatedOrder.getFecha_colchon_pedido());
+            pstmt.setInt(2, updatedOrder.getId_empresa_proveedor());
+            pstmt.setInt(3, updatedOrder.getId_empleado());
+            pstmt.setInt(4, updatedOrder.getId_pedido_colchon());
             pstmt.executeUpdate();
 
             System.out.println("Pedido de colchon actualizado");
@@ -63,13 +63,13 @@ public class PedidosColchonDAO {
         }
     }
 
-    public boolean eliminarPedidoColchon(int id_pedido_colchon) {
-        try (PreparedStatement pstmt = conexion.prepareStatement(
+    public boolean deleteMattressOrder(int id_order) {
+        try (PreparedStatement pstmt = connection.prepareStatement(
                 "DELETE FROM pedidos_colchon WHERE id_pedido_colchon = ?")) {
-            pstmt.setInt(1, id_pedido_colchon);
+            pstmt.setInt(1, id_order);
             pstmt.executeUpdate();
 
-            System.out.println("Pedido de colchon eliminado con ID: " + id_pedido_colchon);
+            System.out.println("Pedido de colchon eliminado con ID: " + id_order);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
