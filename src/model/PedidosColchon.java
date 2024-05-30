@@ -2,30 +2,35 @@ package model;
 
 import java.sql.Date;
 
-public class PedidosColchon {
-    private int id_pedido_colchon;
-    private Date fecha_colchon_pedido;
-    private int id_empresa_proveedor;
-    private int id_empleado;
+public class MattressOrders {
+    private int mattress_order_id;
+    private Date mattress_order_date;
+    private int supplier_id;
+    private int employee_id;
 
-    public PedidosColchon(int id_pedido_colchon, Date fecha_colchon_pedido, int id_empresa_proveedor, int id_empleado) {
-        this.id_pedido_colchon = id_pedido_colchon;
-        this.fecha_colchon_pedido = fecha_colchon_pedido;
-        this.id_empresa_proveedor = id_empresa_proveedor;
-        this.id_empleado = id_empleado;
+    public MattressOrders(int mattress_order_id, Date mattress_order_date, int supplier_id, int employee_id) {
+        this.mattress_order_id = mattress_order_id;
+        this.mattress_order_date = mattress_order_date;
+        this.supplier_id = supplier_id;
+        this.employee_id = employee_id;
     }
 
-    public int getId_pedido_colchon() {
-        return id_pedido_colchon;
+    public int getMattress_order_id() {
+        return mattress_order_id;
     }
 
-    public Date getFecha_colchon_pedido() {
-        return fecha_colchon_pedido;
+    public Date getMattress_order_date() {
+        return mattress_order_date;
     }
 
-    public int getId_empresa_proveedor() {
-        return id_empresa_proveedor;
+    public int getSupplier_id() {
+        return supplier_id;
     }
+
+    public int getEmployee_id() {
+        return employee_id;
+    }
+}
 
     public int getId_empleado() {
         return id_empleado;
