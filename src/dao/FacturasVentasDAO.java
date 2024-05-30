@@ -2,41 +2,41 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
-import model.SalesInvoices;
+import model.SaleInvoices;
 
-public class SalesInvoicesDAO {
+public class SaleInvoicesDAO {
 
     private Connection connection;
 
-    public SalesInvoicesDAO() throws SQLException {
-        connection = DatabaseConnection.connect();
+    public SaleInvoicesDAO() throws SQLException {
+        connection = ConexionBD.conectarse();
     }
 
-    public void addSalesInvoice(SalesInvoices salesInvoice) {
+    public void addSaleInvoice(SaleInvoices saleInvoice) {
         try (PreparedStatement pstmt = connection.prepareStatement(
-                "INSERT INTO sales_invoices (id_sales_invoice, sales_invoice_date, employee_id, customer_id) " +
-                "VALUES (sales_invoices_seq.NEXTVAL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setDate(1, salesInvoice.getSalesInvoiceDate());
-            pstmt.setInt(2, salesInvoice.getEmployeeId());
-            pstmt.setInt(3, salesInvoice.getCustomerId());
+                "INSERT INTO facturas_ventas (id_factura_venta, fecha_factura_venta, id_empleado, id_cliente) " +
+                "VALUES (facturas_ventas_seq.NEXTVAL, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setDate(1, saleInvoice.getFecha_factura_venta());
+            pstmt.setInt(2, saleInvoice.getId_empleado());
+            pstmt.setInt(3, saleInvoice.getId_cliente());
             pstmt.executeUpdate();
 
-            System.out.println("Sales invoice added: " + salesInvoice.getSalesInvoiceDate());
+            System.out.println("Factura de venta agregada: " + saleInvoice.getFecha_factura_venta());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<SalesInvoices> getSalesInvoices() throws SQLException {
-        ArrayList<SalesInvoices> invoiceList = new ArrayList<>();
+    public ArrayList<SaleInvoices> getSaleInvoices() throws SQLException {
+        ArrayList<SaleInvoices> invoiceList = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM sales_invoices");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM facturas_ventas");
             while (rs.next()) {
-                int id_sales_invoice = rs.getInt("id_sales_invoice");
-                Date sales_invoice_date = rs.getDate("sales_invoice_date");
-                int employee_id = rs.getInt("employee_id");
-                int customer_id = rs.getInt("customer_id");
-                SalesInvoices invoice = new SalesInvoices(id_sales_invoice, sales_invoice_date, employee_id, customer_id);
+                int id_invoice = rs.getInt("id_factura_venta");
+                Date invoiceDate = rs.getDate("fecha_factura_venta");
+                int employeeId = rs.getInt("id_empleado");
+                int clientId = rs.getInt("id_cliente");
+                SaleInvoices invoice = new SaleInvoices(id_invoice, invoiceDate, employeeId, clientId);
                 invoiceList.add(invoice);
             }
         } catch (SQLException e) {
@@ -45,18 +45,36 @@ public class SalesInvoicesDAO {
         return invoiceList;
     }
 
-    public boolean updateSalesInvoice(SalesInvoices updatedInvoice) {
+    public boolean updateSaleInvoice(SaleInvoices updatedInvoice) {
         try (PreparedStatement pstmt = connection.prepareStatement(
-                "UPDATE sales_invoices SET sales_invoice_date = ?, employee_id = ?, customer_id = ? " +
-                "WHERE id_sales_invoice = ?")) {
-            pstmt.setDate(1, updatedInvoice.getSalesInvoiceDate());
-            pstmt.setInt(2, updatedInvoice.getEmployeeId());
-            pstmt.setInt(3, updatedInvoice.getCustomerId());
-            pstmt.setInt(4, updatedInvoice.getIdSalesInvoice());
+                "UPDATE facturas_ventas SET fecha_factura_venta = ?, id_empleado = ?, id_cliente = ? " +
+                "WHERE id_factura_venta = ?")) {
+            pstmt.setDate(1, updatedInvoice.getFecha_factura_venta());
+            pstmt.setInt(2, updatedInvoice.getId_empleado());
+            pstmt.setInt(3, updatedInvoice.getId_cliente());
+            pstmt.setInt(4, updatedInvoice.getId_factura_venta());
             pstmt.executeUpdate();
 
-            System.out.println("Sales invoice updated");
+            System.out.println("Factura de venta actualizada");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean deleteSaleInvoice(int id_invoice) {
+        try (PreparedStatement pstmt = connection.prepareStatement(
+                "DELETE FROM facturas_ventas WHERE id_factura_venta = ?")) {
+            pstmt.setInt(1, id_invoice);
+            pstmt.executeUpdate();
+
+            System.out.println("Factura de venta eliminada con ID: " + id_invoice);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
+
