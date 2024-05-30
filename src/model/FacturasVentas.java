@@ -2,32 +2,32 @@ package model;
 
 import java.sql.Date;
 
-public class FacturasVentas {
-    private int id_factura_venta;
-    private Date fecha_factura_venta;
-    private int id_empleado;
-    private int id_cliente;
+public class SaleInvoices {
+    private int id_sale_invoice;
+    private Date sale_invoice_date;
+    private int employee_id;
+    private int client_id;
 
-    public FacturasVentas(int id_factura_venta, Date fecha_factura_venta, int id_empleado, int id_cliente) {
-        this.id_factura_venta = id_factura_venta;
-        this.fecha_factura_venta = fecha_factura_venta;
-        this.id_empleado = id_empleado;
-        this.id_cliente = id_cliente;
+    public SaleInvoices(int id_sale_invoice, Date sale_invoice_date, int employee_id, int client_id) {
+        this.id_sale_invoice = id_sale_invoice;
+        this.sale_invoice_date = sale_invoice_date;
+        this.employee_id = employee_id;
+        this.client_id = client_id;
     }
 
-    public int getId_factura_venta() {
-        return id_factura_venta;
+    public int getId_sale_invoice() {
+        return id_sale_invoice;
     }
 
-    public Date getFecha_factura_venta() {
-        return fecha_factura_venta;
+    public Date getSale_invoice_date() {
+        return sale_invoice_date;
     }
 
-    public int getId_empleado() {
-        return id_empleado;
+    public int getEmployee_id() {
+        return employee_id;
     }
 
-    public int getId_cliente() {
-        return id_cliente;
+    public int getClient_id() {
+        return client_id;
     }
 }
