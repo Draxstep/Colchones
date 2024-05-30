@@ -13,6 +13,7 @@ public class Type_ContactTable {
 
     public void registerNewObject(String typeContact_name){
         typeContact.add(new TypeContact(currentId, typeContact_name));
+        currentId++;
     }
 
     public void deleteRegisteredObject(int objectId){
